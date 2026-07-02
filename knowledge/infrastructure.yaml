@@ -1,0 +1,69 @@
+# Infrastructure map — TEMPLATE
+#
+# Describe YOUR organization's systems here so the evidence agent knows which
+# systems exist, where they live, and how to reach them. This file is read at
+# the start of every run (instant, local, no API calls).
+#
+# The entries below are ILLUSTRATIVE EXAMPLES using fake hostnames
+# (example.com / acme). Replace them with your real systems, then commit to
+# your fork. Always append corrections with dates — don't silently overwrite,
+# the history of what changed is useful context for future runs.
+#
+# Schema: see knowledge/README.md. Every top-level key is a system/service;
+# common fields are: name, url, sso (okta_tile|direct|manual), key_pages,
+# notes, corrections[].
+
+idp:
+  name: "<Your IdP, e.g. Okta / Entra ID / Google Workspace>"
+  user_portal: https://your-idp.example.com          # end-user SSO dashboard
+  admin_console: https://your-idp-admin.example.com   # admin console (often separate SSO)
+  notes: >
+    EXAMPLE. The admin console is frequently a separate SSO flow from the
+    user portal, and policy pages often require an elevated admin role.
+
+siem:
+  name: "<Your SIEM, e.g. Splunk / Sentinel / Panther>"
+  url: https://siem.example.com
+  sso: okta_tile
+  key_pages:
+    dashboard: https://siem.example.com/
+    data_sources: https://siem.example.com/settings/data-sources
+    search: https://siem.example.com/search?query=<system>
+    detections: https://siem.example.com/detections
+  notes: >
+    EXAMPLE. Used as a fallback evidence source when direct admin access to a
+    system is unavailable — capture the system as a monitored data source and
+    show that its events are being logged.
+
+cloud:
+  provider: "<AWS / GCP / Azure>"
+  region: <primary-region>
+  accounts:
+    production:
+      id: "000000000000"
+      subdomain: 000000000000-example.<region>.console.aws.amazon.com
+  notes: >
+    EXAMPLE. With multiple cloud SSO sessions, generic console URLs can trigger
+    an account picker — prefer account-specific URLs where the provider supports them.
+
+source_control:
+  name: GitHub
+  org: your-org
+  sso: okta_tile
+  notes: >
+    EXAMPLE. Branch protection settings may 404 for non-admins; org-level
+    rulesets (/rules) are usually visible to all members.
+
+mdm:
+  name: "<Your MDM, e.g. Jamf / Intune / Kandji>"
+  url: https://mdm.example.com
+  sso: manual
+  notes: "EXAMPLE. Full disk encryption is often enforced via a config profile."
+
+monitoring:
+  name: "<Your monitoring/APM, e.g. Datadog / Grafana>"
+  url: https://monitoring.example.com
+  sso: okta_tile
+  key_pages:
+    log_explorer: /logs
+    monitors: /monitors/manage

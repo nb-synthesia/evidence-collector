@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Evidence output (screenshots, PDFs) — don't commit evidence
+*.png
+*.pdf
+compliance-evidence/
+vanta-evidence/
+
+# NOTE: config.yaml (created by install.sh) is org-wide and NOT secret, so it is
+# intentionally NOT ignored — commit it to your fork so your team shares it. If
+# you'd rather keep it local-only, add `config.yaml` here.
+
+# Credentials — NEVER commit
+credentials.json
+.token_cache.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

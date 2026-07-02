@@ -1,0 +1,33 @@
+# Vanta Evidence Collector — organization configuration TEMPLATE
+#
+# Copy this to `config.yaml` (install.sh does it for you) and fill in your
+# values. This file is NOT secret and is meant to be committed to your fork so
+# your whole team shares it. Secrets (Vanta OAuth) live separately in
+# ~/.vanta/credentials.json and are never committed.
+#
+# Env vars override these at runtime:
+#   EVIDENCE_SSO_URL, EVIDENCE_VANTA_REGION / VANTA_REGION, EVIDENCE_CONFIG
+
+# Your IdP / SSO end-user dashboard. The agent navigates here to verify the SSO
+# session before capturing (Okta end-user dashboard, Entra MyApps, Google app
+# launcher, OneLogin portal, etc.).
+sso_url: "https://your-idp.example.com"
+
+# Vanta API region: us | eu | gov
+vanta_region: "us"
+
+# Where the detailed playbooks (the "base document") live.
+playbook:
+  # backend: local | notion | confluence | google_doc | url
+  backend: "local"
+
+  # Used when backend == local: directory of markdown playbooks in this repo.
+  path: "knowledge/playbooks"
+
+  # Used when backend is external (notion/confluence/google_doc/url): the root
+  # page/document that holds (or links) your playbooks. Individual playbooks are
+  # referenced from knowledge/playbooks/index.yaml via `playbook_ref`.
+  base_document_url: ""
+  base_document_id: ""
+
+  notes: ""

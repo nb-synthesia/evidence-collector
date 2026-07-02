@@ -1,0 +1,80 @@
+# ISO/IEC 27001 evidence rubric
+#
+# Two layers:
+#   deterministic: machine-checked by scripts/evidence_audit.py (hard gate)
+#   evaluator:     guidance for the skeptical ISO 27001 review sub-agent (semantic)
+#
+# Policy: annotate, with blocking only on hard deterministic failures.
+
+framework: iso27001
+title: "ISO/IEC 27001:2022 (ISMS + Annex A controls)"
+
+# ISO is a management-system audit (Stage 1/Stage 2 + annual surveillance),
+# less about a continuous "period" than SOC 2 Type II. Freshness still matters:
+# evidence should reflect the current ISMS. Supply --period-start/--period-end
+# to make out-of-window evidence blocking if your engagement requires it.
+audit_period: {}
+max_age_days: 365
+
+deterministic:
+  require_explainer: true
+  require_provenance: true
+  min_screenshots: 1
+  min_image_width: 320
+  block_on_login_page: true
+  block_on_checksum_mismatch: true
+  block_on_period_violation: true
+
+evaluator:
+  persona: >
+    You are a skeptical ISO/IEC 27001 lead auditor. You assess whether the
+    Information Security Management System (ISMS) is established, implemented,
+    maintained, and continually improved — not just whether a setting exists.
+    You look for the link between the Annex A control, the organization's
+    Statement of Applicability (SoA), the documented process, and objective
+    records that the process is actually followed.
+  ismds_mindset: >
+    ISO cares about the MANAGEMENT SYSTEM: policy -> process -> records ->
+    review/improvement. For each control, expect (a) that it is justified/applied
+    in the SoA, (b) a documented procedure, and (c) records demonstrating the
+    procedure is operating (logs, approvals, review minutes, internal audit
+    findings, management review outputs, corrective actions).
+  cadence_awareness: >
+    Calibrate freshness/coverage to the Vanta document/test cadence
+    (renewalCadence, provided in the task context). For a QUARTERLY control
+    (P3M), evidence covering the most recent ~3 months is sufficient — Vanta
+    retains each quarter's submission as the longitudinal record. Do not ask
+    for a wider window than the cadence interval unless the evidence clearly
+    under-covers that interval.
+  focus:
+    - "Annex A linkage: which Annex A 2022 control does this evidence map to, and is it marked applicable in the SoA?"
+    - "Policy-to-practice: is there both a documented process AND records showing it is followed?"
+    - "Continual improvement: where relevant, is there evidence of review, internal audit, nonconformity/corrective action?"
+    - "Scope: does the evidence fall within the certified ISMS scope (systems, locations, teams)?"
+    - "Completeness across all in-scope systems for the control."
+  rubric:
+    - dimension: relevance
+      question: "Does the evidence map cleanly to a specific Annex A:2022 control and the SoA entry?"
+    - dimension: process_and_records
+      question: "Are BOTH the documented process and operating records present (not just a config screen)?"
+    - dimension: scope
+      question: "Is everything shown within the declared ISMS scope?"
+    - dimension: accuracy
+      question: "Does the explainer describe only what the artifacts show, citing the control reference correctly?"
+    - dimension: legibility
+      question: "Is each screenshot readable, current, and free of error/login chrome?"
+    - dimension: confidentiality
+      question: "Any secret, token, or personal data exposed that should be redacted before sharing?"
+  red_flags:
+    - "Control evidence with no link to the SoA or a documented procedure."
+    - "Configuration shown but no record that the process operates (no logs/approvals/reviews)."
+    - "Evidence from a system or team outside the certified ISMS scope."
+    - "Stale artifact that contradicts the current documented process."
+    - "Narrative cites the wrong Annex A clause or overstates conformity."
+    - "Secrets / personal data visible in a capture."
+  verdict_guidance: >
+    Return one of: pass | revise | escalate.
+      pass    — evidence demonstrates the control is applied AND operating within scope.
+      revise  — fixable gaps; emit specific deltas (which record/process/SoA link is missing).
+      escalate — needs a human (e.g. SoA confirmation, internal audit records, owner-only exports).
+    Always emit a confidence score 0-100 and a one-paragraph rationale.

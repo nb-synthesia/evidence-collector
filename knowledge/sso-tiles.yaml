@@ -1,0 +1,36 @@
+# SSO / IdP tile URLs — TEMPLATE
+#
+# Many services don't SSO correctly when navigated to directly — they need the
+# SAML/OIDC flow to be *initiated* from the IdP (the "tile"/"bookmark" in your
+# Okta / Entra / Google / OneLogin dashboard). When capturing evidence for such
+# a service, look up its tile URL here first, navigate to the tile, let the IdP
+# complete SSO, and you land on the service's dashboard authenticated.
+#
+# The entries below are ILLUSTRATIVE EXAMPLES with fake URLs. Replace them with
+# your real IdP tile URLs (copy the tile/bookmark link from your IdP dashboard),
+# then commit to your fork. Append new tiles as you discover them during runs.
+#
+# Schema:
+#   tiles:
+#     - service: Service name
+#       tile_url: https://your-idp.example.com/home/...
+#       post_sso_url: Where you land after SSO (optional)
+#       notes: Any quirks (optional)
+
+tiles:
+  - service: "<Cloud provider console>"
+    tile_url: https://your-idp.example.com/home/amazon_aws_sso/EXAMPLE
+    notes: EXAMPLE. Lands on the cloud SSO portal; then click into the account.
+
+  - service: "<SIEM>"
+    tile_url: https://your-idp.example.com/home/siem/EXAMPLE
+    post_sso_url: https://siem.example.com
+
+  - service: "<Monitoring/APM>"
+    tile_url: https://your-idp.example.com/home/monitoring/EXAMPLE
+    post_sso_url: https://monitoring.example.com
+    notes: EXAMPLE. Direct login may show a password form — use the tile.
+
+  - service: GitHub
+    tile_url: https://your-idp.example.com/home/githubcloud/EXAMPLE
+    post_sso_url: https://github.com/your-org

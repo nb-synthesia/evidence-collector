@@ -1,0 +1,14 @@
+# Code owners for review routing.
+#
+# Replace the placeholder owners below with your own team/usernames after
+# forking. Knowledge and script changes should get a careful review since they
+# drive what evidence is collected and uploaded.
+#
+# Example:
+#   knowledge/ @your-org/security-team
+#   scripts/   @your-org/security-team
+
+knowledge/  @REPLACE_ME
+scripts/    @REPLACE_ME
+CLAUDE.md   @REPLACE_ME
+SKILL.md    @REPLACE_ME

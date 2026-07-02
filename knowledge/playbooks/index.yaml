@@ -1,0 +1,45 @@
+# Playbook routing table — TEMPLATE
+#
+# Maps each Vanta control (by name) to a category, the systems involved, and a
+# reference to the detailed playbook (the "base document"). The agent reads
+# this FIRST (instant local lookup), then fetches the referenced playbook for
+# the full evidence strategy.
+#
+# WHERE THE PLAYBOOK DETAIL LIVES is configured in config.yaml under `playbook`.
+# The `playbook_ref` field below is interpreted according to that backend:
+#   - backend: local        -> playbook_ref is a markdown filename under
+#                              `playbook.path` (default: knowledge/playbooks/)
+#   - backend: notion       -> playbook_ref is a Notion page ID
+#   - backend: confluence   -> playbook_ref is a Confluence page ID or URL
+#   - backend: google_doc   -> playbook_ref is a Google Doc URL/ID
+#   - backend: url          -> playbook_ref is a full URL
+#
+# The `summary` gives the agent enough context to orient (and sometimes skip
+# fetching the full playbook). The `systems` list is what the QA gate checks
+# for coverage. Entries below are ILLUSTRATIVE EXAMPLES — replace with your
+# real controls and commit to your fork.
+#
+# To add a new category:
+#   1. Add an entry here (control names must match your Vanta document titles).
+#   2. Create the playbook in your configured base document and set playbook_ref.
+#   3. Commit + push.
+
+categories:
+  - id: change-management
+    title: "Change Management"
+    controls:
+      - Evidence of Edit Checks
+      - Tickets for Sampled Changes
+      - List of System Changes
+    systems: [github]
+    playbook_ref: change-management.md   # local example (see knowledge/playbooks/)
+    summary: "EXAMPLE — source-control rulesets + PR review workflow + CI checks"
+
+  - id: monitoring-logging
+    title: "Monitoring & Logging"
+    controls:
+      - Continuous Monitoring
+      - Audit Log Settings
+    systems: [monitoring, siem]
+    playbook_ref: monitoring-logging.md
+    summary: "EXAMPLE — APM/monitoring for metrics + SIEM for security logs"

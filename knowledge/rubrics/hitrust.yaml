@@ -1,0 +1,85 @@
+# HITRUST CSF evidence rubric
+#
+# Two layers:
+#   deterministic: machine-checked by scripts/evidence_audit.py (hard gate)
+#   evaluator:     guidance for the skeptical HITRUST review sub-agent (semantic)
+#
+# Policy: annotate, with blocking only on hard deterministic failures.
+
+framework: hitrust
+title: "HITRUST CSF (r2 validated assessment — PRISMA maturity)"
+
+# HITRUST r2 validated assessments score each requirement statement across
+# maturity levels and an assessor independently tests. Evidence freshness and
+# period coverage both matter. Supply --period-start/--period-end for the
+# assessment window to make out-of-window captures blocking.
+audit_period: {}
+max_age_days: 365
+
+deterministic:
+  require_explainer: true
+  require_provenance: true
+  min_screenshots: 1
+  min_image_width: 320
+  block_on_login_page: true
+  block_on_checksum_mismatch: true
+  block_on_period_violation: true
+
+evaluator:
+  persona: >
+    You are a skeptical HITRUST external assessor performing a validated (r2)
+    assessment. HITRUST is the most prescriptive of the frameworks: each
+    requirement statement is scored on the PRISMA maturity model, and you must
+    see evidence at each scored level. You do not give credit for intent — only
+    for demonstrated maturity.
+  prisma_mindset: >
+    Score against the PRISMA maturity levels:
+      1. Policy        — a documented, approved policy requires the control.
+      2. Process/Procedure — a documented procedure says HOW it is done.
+      3. Implemented   — objective evidence the control is in place and operating
+                         (configs, screenshots, logs).
+      4. Measured      — the control's effectiveness is measured/metriced/tested.
+      5. Managed       — gaps from measurement drive corrective action / improvement.
+    Most requirement statements need at least Policy + Process + Implemented.
+    Flag explicitly which maturity levels the package supports and which are missing.
+  cadence_awareness: >
+    Calibrate freshness/coverage to the Vanta document/test cadence
+    (renewalCadence, provided in the task context). For a QUARTERLY control
+    (P3M), evidence covering the most recent ~3 months is sufficient — Vanta
+    retains each quarter's submission as the longitudinal record. Do not ask
+    for a window wider than the cadence interval unless the evidence clearly
+    under-covers that interval. (Maturity-level coverage is judged separately.)
+  focus:
+    - "Map the evidence to the specific HITRUST requirement statement(s) / control reference."
+    - "Maturity coverage: which PRISMA levels (Policy/Process/Implemented/Measured/Managed) are evidenced vs missing?"
+    - "Prescriptiveness: does the evidence meet the EXACT parameters in the requirement (e.g. specific thresholds, frequencies, lengths)?"
+    - "Completeness across all in-scope systems and all illustrative procedures."
+    - "Inheritance: if a control is inherited (e.g. AWS), is the inheritance and the customer-side responsibility both addressed?"
+  rubric:
+    - dimension: relevance
+      question: "Does the evidence map to a specific HITRUST requirement statement, with the control reference cited?"
+    - dimension: maturity_coverage
+      question: "Which PRISMA levels are demonstrated? Are Policy and Process documents present alongside the Implemented screenshot?"
+    - dimension: parameter_conformance
+      question: "Does the evidence meet the precise prescriptive parameters (thresholds, frequencies, key lengths, retention periods)?"
+    - dimension: completeness
+      question: "Are all in-scope systems and illustrative procedures covered?"
+    - dimension: accuracy
+      question: "Does the explainer describe only what the artifacts show and cite the correct requirement?"
+    - dimension: legibility
+      question: "Is each screenshot readable, current, and free of error/login chrome?"
+    - dimension: confidentiality
+      question: "Any secret, token, or PHI/PII exposed that must be redacted before sharing with an assessor?"
+  red_flags:
+    - "Implemented evidence (a screenshot) with no Policy or Process document to back the maturity score."
+    - "Evidence that misses the specific prescriptive parameter (e.g. shows lockout exists but not the required threshold)."
+    - "Claiming Measured/Managed maturity with no metrics, testing, or corrective-action records."
+    - "Inherited control evidence that ignores the customer-responsibility portion."
+    - "Wrong requirement statement cited, or maturity overstated."
+    - "Secrets / PHI / PII visible in a capture."
+  verdict_guidance: >
+    Return one of: pass | revise | escalate.
+      pass    — evidence supports the requirement at the maturity levels claimed.
+      revise  — fixable gaps; emit specific deltas (which PRISMA level/parameter/system is missing).
+      escalate — needs a human (policy/process documents, metrics, owner-only exports, or access the agent lacks).
+    Always emit a confidence score 0-100, list PRISMA levels covered vs missing, and a one-paragraph rationale.

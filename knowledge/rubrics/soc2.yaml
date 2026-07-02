@@ -1,0 +1,88 @@
+# SOC 2 evidence rubric
+#
+# Two layers:
+#   deterministic: machine-checked by scripts/evidence_audit.py (hard gate)
+#   evaluator:     guidance for the skeptical SOC 2 review sub-agent (semantic)
+#
+# Policy: annotate, with blocking only on hard deterministic failures.
+
+framework: soc2
+title: "SOC 2 (Trust Services Criteria — Type II)"
+
+# Audit window. Leave empty to use the soft `max_age_days` freshness check
+# (warn-only). Pass --period-start/--period-end to evidence_audit.py for the
+# REAL engagement window to make out-of-period evidence a hard BLOCK — Type II
+# opinions cover a period, so evidence dated outside it does not prove the
+# control operated during the review period.
+audit_period: {}
+
+# Soft freshness threshold (days) used only when no hard period is supplied.
+max_age_days: 365
+
+deterministic:
+  require_explainer: true
+  require_provenance: true
+  min_screenshots: 1
+  min_image_width: 320
+  block_on_login_page: true
+  block_on_checksum_mismatch: true
+  # When a hard period IS supplied, treat out-of-period captures as blocking.
+  block_on_period_violation: true
+
+evaluator:
+  persona: >
+    You are a skeptical SOC 2 auditor reviewing an evidence package before it is
+    submitted. Assume nothing; the burden of proof is on the evidence. Your job
+    is to find the reasons a service auditor would issue an exception, not to be
+    helpful to the person who collected it.
+  type_ii_mindset: >
+    SOC 2 Type II is about OPERATING EFFECTIVENESS OVER A PERIOD, not a single
+    point in time. A screenshot of a configuration proves the control is
+    DESIGNED; it does not prove it OPERATED throughout the period. Demand
+    period-spanning evidence (logs, ticket histories, recurring alerts, sampled
+    populations with dates) wherever the control is about operation.
+  cadence_awareness: >
+    Calibrate period_coverage to the Vanta document/test cadence
+    (renewalCadence, provided in the task context). For a QUARTERLY control
+    (P3M), evidence covering the most recent ~3 months SATISFIES period
+    coverage — Vanta retains each quarter's submission, so the longitudinal
+    record is the SEQUENCE of quarterly evidence packages, not a single
+    12-month export. Do NOT flag ~3-month coverage as insufficient for a
+    quarterly control and do not ask for a wider window in that case. Only
+    push for a longer window when the cadence is annual/semi-annual AND the
+    evidence clearly under-covers that window. The relevant question is "does
+    the evidence span the cadence interval?", not "does it span 12 months?".
+  focus:
+    - "Does the evidence answer THIS specific Trust Services Criteria point, or an adjacent one?"
+    - "Period coverage: is operation demonstrated across the review period, not just today?"
+    - "Population & sampling: if the ask implies a population (changes, tickets, users), is the full population or a defensible sample shown with dates?"
+    - "Completeness: are ALL in-scope systems for this control represented?"
+    - "Independence of evidence from the narrative: can the screenshots stand on their own?"
+  rubric:
+    - dimension: relevance
+      question: "Does each artifact directly support the exact control text, with no leap of faith required?"
+    - dimension: period_coverage
+      question: "Is operating effectiveness shown across the CADENCE INTERVAL (see cadence_awareness) via date ranges / recurring records — not a single snapshot? Do NOT penalise ~3-month coverage for a quarterly (P3M) control."
+    - dimension: completeness
+      question: "Are all in-scope systems and all sub-parts of the ask covered?"
+    - dimension: accuracy
+      question: "Does the explainer describe ONLY what the screenshots actually show, with no overclaiming?"
+    - dimension: legibility
+      question: "Is each screenshot readable, on the right page/account, and free of error/login chrome?"
+    - dimension: confidentiality
+      question: "Is any secret, token, customer PII, or unrelated sensitive data exposed that should be redacted before sharing with an auditor?"
+  red_flags:
+    - "Explainer says a control 'operates'/'is enforced' but the screenshot only shows a settings page (design, not operation)."
+    - "A single dated snapshot offered for a period-of-time control."
+    - "The ask references a population (e.g. 'all changes in the period') but only one example is shown."
+    - "Wrong AWS account, wrong org, or stale/cached view in the screenshot."
+    - "Narrative makes a claim that no attached artifact substantiates (hallucinated control)."
+    - "Secrets / API keys / customer data visible in a capture."
+  verdict_guidance: >
+    Return one of: pass | revise | escalate.
+      pass    — evidence fully and defensibly supports the control.
+      revise  — fixable gaps; emit specific, actionable deltas (which system,
+                which page, what date range) for the capture agent to redo.
+      escalate — needs a human decision or access the agent cannot get
+                (e.g. Super Admin page, period-spanning export only an owner can pull).
+    Always emit a confidence score 0-100 and a one-paragraph rationale.

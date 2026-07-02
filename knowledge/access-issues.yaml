@@ -1,0 +1,41 @@
+# Known access issues — TEMPLATE
+#
+# Blockers discovered during evidence collection. The agent checks this BEFORE
+# attempting capture so it doesn't waste time (and SSO sessions) on things that
+# are known not to work, and knows the workaround up front.
+#
+# This file starts nearly empty on purpose — it is meant to GROW as your agent
+# learns your environment. The two entries below are ILLUSTRATIVE EXAMPLES of
+# the kinds of blockers that commonly show up; keep or delete them.
+#
+# Rules:
+#   - Always append, never delete — the history of what failed is valuable.
+#   - Add a `discovered` date to every entry.
+#
+# Schema:
+#   - system: System name
+#     url: Optional URL that triggers the issue
+#     issue: What goes wrong
+#     workaround: How to get the evidence anyway
+#     discovered: YYYY-MM-DD
+
+- system: CDP Chrome
+  issue: >
+    NEVER kill (kill, pkill, killall) the CDP Chrome process. Killing it
+    destroys all established SSO sessions across every service at once.
+  workaround: >
+    If the profile is stale, ask the user to close the CDP Chrome window
+    manually, then re-run prepare-chrome. Otherwise reuse the running instance
+    and re-establish individual sessions via the IdP tiles.
+  discovered: 2024-01-01
+
+- system: "<Admin console example>"
+  url: admin.example.com
+  issue: >
+    EXAMPLE. Some policy pages require an elevated admin role that the operator
+    account may not hold, returning "Access forbidden".
+  workaround: >
+    EXAMPLE. Use the SIEM fallback — capture the system as a monitored data
+    source showing the relevant events are logged — and/or hand the item off
+    to the team that holds the elevated role.
+  discovered: 2024-01-01
