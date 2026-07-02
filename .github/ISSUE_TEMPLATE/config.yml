@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security / sensitive report
+    url: https://github.com/nb-synthesia/evidence-collector/security/advisories/new
+    about: Report anything that could expose secrets, credentials, or evidence privately — do not open a public issue.
+  - name: Question / discussion
+    url: https://github.com/nb-synthesia/evidence-collector/discussions
+    about: Ask usage questions or discuss ideas here.
