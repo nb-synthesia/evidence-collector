@@ -1,4 +1,4 @@
-# Vanta Evidence Collector — organization configuration TEMPLATE
+# Compliance Evidence Collector — organization configuration TEMPLATE
 #
 # Copy this to `config.yaml` (install.sh does it for you) and fill in your
 # values. This file is NOT secret and is meant to be committed to your fork so

@@ -1,6 +1,6 @@
-# Vanta Evidence Collector
+# Compliance Evidence Collector
 
-Automated Vanta evidence collection pipeline. One command iterates the pending
+Automated evidence collection pipeline for Vanta audits. One command iterates the pending
 backlog: identify → research → navigate → screenshot → explain → audit (QA
 gate) → upload (draft).
 
@@ -72,7 +72,7 @@ Resolve the repo directory first:
 ```bash
 SKILL_DIR="$(cd "$(dirname "$0")" && pwd)"  # if running from repo root
 # OR: set to wherever the skill is installed/symlinked, e.g.
-SKILL_DIR="$HOME/.claude/skills/get-vanta-evidence"
+SKILL_DIR="$HOME/.claude/skills/collect-evidence"
 ```
 
 All scripts:
@@ -92,11 +92,11 @@ pip install -r "$SKILL_DIR/requirements.txt"
 ## Invocation
 
 ```
-/get-vanta-evidence                      # all pending items
-/get-vanta-evidence CC8.1               # specific control
-/get-vanta-evidence 69f9b90fae863182... # specific document/test ID
-/get-vanta-evidence soc2                # all pending SOC 2 items
-/get-vanta-evidence iso27001            # all pending ISO 27001 items
+/collect-evidence                      # all pending items
+/collect-evidence CC8.1               # specific control
+/collect-evidence 69f9b90fae863182... # specific document/test ID
+/collect-evidence soc2                # all pending SOC 2 items
+/collect-evidence iso27001            # all pending ISO 27001 items
 ```
 
 ## Pipeline (step by step)

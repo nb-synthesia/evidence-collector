@@ -1,8 +1,8 @@
 ---
-name: get-vanta-evidence
+name: collect-evidence
 description: >
   Collect, screenshot, and upload compliance evidence for Vanta audits.
-  Invoke with /get-vanta-evidence [filter] where filter is a Vanta test ID,
+  Invoke with /collect-evidence [filter] where filter is a Vanta test ID,
   control ID (e.g. CC8.1), framework name (soc2, hitrust, iso27001), or
   empty to process all pending "Needs document" items.
   For each pending item: pulls the auditor ask, researches how your
@@ -10,12 +10,12 @@ description: >
   navigates source systems in the user's Chrome session via Playwright CDP,
   captures screenshots, generates an explainer PDF, and uploads to Vanta
   (draft — human reviews before submitting).
-  Trigger on: /get-vanta-evidence, "collect evidence", "get screenshots for
+  Trigger on: /collect-evidence, "collect evidence", "get screenshots for
   Vanta", "process evidence backlog", "screenshot for control",
   "build evidence for", "upload to Vanta", "gather evidence for vanta".
 ---
 
-# /get-vanta-evidence
+# /collect-evidence
 
 Read `CLAUDE.md` for the full pipeline instructions.
 

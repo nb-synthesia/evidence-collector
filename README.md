@@ -1,4 +1,4 @@
-# Vanta Evidence Collector
+# Compliance Evidence Collector
 
 An open-source AI-agent skill that automates compliance evidence collection for
 [Vanta](https://www.vanta.com/) audits. Give it a control ID, a framework, or
@@ -10,10 +10,14 @@ It runs as a skill inside AI coding assistants (Claude Desktop, Claude Code,
 Cursor) and is organization-agnostic: everything specific to your company lives
 in `config.yaml` and the `knowledge/` files, which you fill in after forking.
 
+> **Not affiliated with Vanta.** This is an independent, community-built tool
+> that talks to the public Vanta API. "Vanta" is a trademark of Vanta Inc.,
+> used here only to describe compatibility. See [Trademarks](#trademarks).
+
 ```
-/get-vanta-evidence CC8.1     →  captures change management evidence
-/get-vanta-evidence soc2      →  processes all pending SOC 2 items
-/get-vanta-evidence            →  processes the entire pending backlog
+/collect-evidence CC8.1     →  captures change management evidence
+/collect-evidence soc2      →  processes all pending SOC 2 items
+/collect-evidence            →  processes the entire pending backlog
 ```
 
 ## What it does
@@ -158,7 +162,7 @@ Commit these to your fork so your team shares them.
 Open Claude Desktop / Claude Code / Cursor and say:
 
 ```
-/get-vanta-evidence <a Vanta document or test URL>
+/collect-evidence <a Vanta document or test URL>
 ```
 
 The agent prepares a Chrome CDP instance (copying your existing Chrome profile
@@ -219,3 +223,11 @@ Licensed under the **GNU General Public License v3.0** — see [LICENSE](LICENSE
 Its strong copyleft means derivative works that are distributed must also be
 released under GPL-3.0 with source, which keeps this tool and its improvements
 open.
+
+## Trademarks
+
+This project is **not affiliated with, endorsed by, or sponsored by Vanta Inc.**
+"Vanta" and the Vanta logo are trademarks of Vanta Inc. All other product names,
+logos, and brands are the property of their respective owners. Any references to
+Vanta (or to other services in the templates) are for identification and
+compatibility purposes only and do not imply endorsement.
